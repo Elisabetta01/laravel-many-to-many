@@ -15,9 +15,16 @@
              <p>{{ $project->description }}</p>
              <img src="{{ asset('storage/' . $project->img) }}" alt="" class="img-fluid">
 
-             <div>
-                Categoria: {{ $project->category->name }}
-             </div>
+             @if( $project->category )
+                <div> Categoria: {{$project->category->name}}</div>
+             @endif
+
+             @if( $project->technologies )
+                @foreach ( $project->technologies as $element )
+                <div> Tecnologia: {{ $element->name }} </div>
+                @endforeach
+             @endif
+
         </div>
 
      </div>

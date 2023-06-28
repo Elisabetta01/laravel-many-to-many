@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Admin\Project;
+use App\Models\Admin\Category;
+use App\Models\Admin\Technology;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use App\Models\Admin\Category;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
@@ -34,8 +35,9 @@ class ProjectController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $technologies = Technology::all();
 
-        return view('admin.create', compact('categories'));
+        return view('admin.create', compact('categories', 'technologies'));
     }
 
     /**
@@ -60,6 +62,7 @@ class ProjectController extends Controller
         */
 
         $form_data = $request->validated();
+        
 
         if($request->hasFile('img')){
             $path = Storage::disk('public')->put('project_images', $request->img);
@@ -67,11 +70,17 @@ class ProjectController extends Controller
             $form_data['img'] = $path;
         }
 
-        $newProject = new Project();
+        /*$newProject = new Project();
 
         $newProject->fill( $form_data );
 
-        $newProject->save();
+        $newProject->save();*/
+
+        $newProject = Project::create($form_data);
+
+        if($request->has('technologies')){
+            $newProject->technologies()->attach($request->technologies);
+        }
 
         return redirect()->route( 'admin.projects.index' );
 
@@ -97,8 +106,9 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $categories = Category::all();
+        $technologies = Technology::all();
 
-        return view('admin.edit', compact('project', 'categories'));
+        return view('admin.edit', compact('project', 'categories', 'technologies'));
     }
 
     /**

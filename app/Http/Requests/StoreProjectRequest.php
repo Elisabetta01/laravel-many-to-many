@@ -32,6 +32,7 @@ class StoreProjectRequest extends FormRequest
             'description' => ['nullable'],
             'img' => ['nullable','image'],
             'category_id' => ['nullable', 'exists:categories,id'],
+            'technologies' => ['exists:technologies,id'],
         ];
     }
 }

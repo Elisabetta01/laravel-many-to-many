@@ -53,6 +53,26 @@
             @enderror
         </div>
 
+        <div class="form-group">
+
+            @foreach($technologies as $element)
+
+                <div class="form-check" >
+
+                    @if( $errors->any() )
+                        <input class="form-check-input" type="checkbox" value="{{ $element->id }}" id="checkbox-{{ $element->id }}" name="technologies[]" {{ in_array($element->id, old( 'technologies', [] )) ? 'checked' : '' }}>
+                    
+                    @else
+                        <input class="form-check-input" type="checkbox" value="{{ $element->id }}" id="checkbox-{{ $element->id }}" name="technologies[]" {{ ( $project->technologies->contains($element) ) ? 'checked' : '' }}>
+
+                    @endif
+                    <label class="form-check-label" for="checkbox{{ $element->id }}">
+                     {{$element->name}}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
         <button type="submit" class="btn btn-primary my-4">Modifica</button>
 
     </form>
