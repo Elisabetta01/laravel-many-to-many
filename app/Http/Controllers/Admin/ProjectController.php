@@ -143,6 +143,10 @@ class ProjectController extends Controller
 
         $project->update($form_data);
 
+        if($request->has('technologies')){
+            $project->technologies()->sync($request->technologies);
+        }
+
         return redirect()->route('admin.projects.index');
 
     }
@@ -155,6 +159,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+
+        $project->technologies()->sync([]);
 
         if($project->img){
             Storage::delete($project->img);
